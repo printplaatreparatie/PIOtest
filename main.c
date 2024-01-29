@@ -37,10 +37,10 @@ int main() {
 
     // Do nothing
     while (true) {
-        sleep_ms(1000);
+        sleep_ms(500);
         pio_sm_set_enabled(pio, sm0, true);
         pio_sm_set_enabled(pio, sm1, false);
-        sleep_ms(1000);
+        sleep_ms(500);
         pio_sm_set_enabled(pio, sm0, false);
         pio_sm_set_enabled(pio, sm1, true);
         printf("I'm alive!\r\n");
