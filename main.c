@@ -43,6 +43,6 @@ int main() {
         sleep_ms(500);
         pio_sm_set_enabled(pio, sm0, false);
         pio_sm_set_enabled(pio, sm1, true);
-        printf("Still alive!\r\n");
+        printf("Serious debug message.\r\n");
     }
 }
