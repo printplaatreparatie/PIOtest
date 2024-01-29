@@ -8,7 +8,9 @@ int main() {
 
     static const uint led0_pin = 18;
     static const uint led1_pin = 24;
-    static const float pio_freq = 2000;
+    static const float pio_freq0 = 2000;
+    static const float pio_freq1 = 5000;
+    static const float pio_freq2 = 10000;
 
     // Initialize chosen serial port
     stdio_init_all();
@@ -19,17 +21,21 @@ int main() {
     // Get first free state machine in PIO 0
     uint sm0 = pio_claim_unused_sm(pio, true);
     uint sm1 = pio_claim_unused_sm(pio, true);
+    uint sm2 = pio_claim_unused_sm(pio, true);
 
     // Add PIO program to PIO instruction memory. SDK will find location and
     // return with the memory offset of the program.
     uint offset = pio_add_program(pio, &blink_program);
 
     // Calculate the PIO clock divider
-    float div = (float)clock_get_hz(clk_sys) / pio_freq;
+    float div0 = (float)clock_get_hz(clk_sys) / pio_freq0;
+    float div1 = (float)clock_get_hz(clk_sys) / pio_freq1;
+    float div2 = (float)clock_get_hz(clk_sys) / pio_freq2;
 
     // Initialize the program using the helper function in our .pio file
-    blink_program_init(pio, sm0, offset, led0_pin, div);
-    blink_program_init(pio, sm1, offset, led1_pin, div);
+    blink_program_init(pio, sm0, offset, led0_pin, div0);
+    blink_program_init(pio, sm1, offset, led1_pin, div1);
+    blink_program_init(pio, sm2, offset, led0_pin, div1);
 
     // Start running our PIO program in the state machine
     // pio_sm_set_enabled(pio, sm1, true);
@@ -38,11 +44,14 @@ int main() {
     // Do nothing
     while (true) {
         sleep_ms(500);
+        pio_sm_set_enabled(pio, sm2, false);
         pio_sm_set_enabled(pio, sm0, true);
-        pio_sm_set_enabled(pio, sm1, false);
         sleep_ms(500);
         pio_sm_set_enabled(pio, sm0, false);
         pio_sm_set_enabled(pio, sm1, true);
+        sleep_ms(500);
+        pio_sm_set_enabled(pio, sm1, false);
+        pio_sm_set_enabled(pio, sm2, true);
         printf("Serious debug message.\r\n");
     }
 }
