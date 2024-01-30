@@ -23,6 +23,9 @@ add_executable(${PROJECT_NAME}
 pico_generate_pio_header(${PROJECT_NAME}  
         ${CMAKE_CURRENT_LIST_DIR}/blink.pio
 )
+pico_generate_pio_header(${PROJECT_NAME}  
+        ${CMAKE_CURRENT_LIST_DIR}/conditionalblink.pio
+)
 
 # Create map/bin/hex/uf2 files
 pico_add_extra_outputs(${PROJECT_NAME})
